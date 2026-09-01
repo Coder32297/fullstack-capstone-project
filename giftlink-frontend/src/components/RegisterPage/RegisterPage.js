@@ -1,14 +1,53 @@
 import React, { useState } from 'react';
 import './RegisterPage.css';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState('');
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
 
     const handleRegister = async () => {
-        console.log("Register invoked");
+        try {
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                })
+            });
+
+            // Task 1: Access data coming from fetch API
+            const json = await response.json();
+
+            // Task 2, 3 & 4: Set user details, set logged in state, navigate to MainPage
+            if (json.authtoken) {
+                sessionStorage.setItem('auth-token', json.authtoken);
+                sessionStorage.setItem('name', firstName);
+                sessionStorage.setItem('email', json.email);
+                setIsLoggedIn(true);
+                navigate('/app');
+            }
+
+            // Task 5: Set error message if registration fails
+            if (json.error) {
+                setShowerr(json.error);
+            }
+
+        } catch (e) {
+            console.log("Error fetching details: " + e.message);
+        }
     };
 
     return (
@@ -18,6 +57,9 @@ function RegisterPage() {
                     <div className="register-card p-4 border rounded">
                         <h2 className="text-center mb-4 font-weight-bold">Register</h2>
                         
+                        {/* Task 6: Display error message to end user */}
+                        {showerr && <div className="text-danger mb-3">{showerr}</div>}
+
                         <div className="mb-3">
                             <label htmlFor="firstName" className="form-label">First Name</label>
                             <input
