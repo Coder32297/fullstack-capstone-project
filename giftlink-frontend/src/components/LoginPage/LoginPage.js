@@ -1,12 +1,45 @@
-import React, { useState } from 'react';
+import {urlConfig} from '../../config';
+import { useAppContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [incorrect, setIncorrect] = useState('');
+    const navigate = useNavigate();
+    const bearerToken = sessionStorage.getItem('bearer-token');
+    const { setIsLoggedIn } = useAppContext();
+
+
+    useEffect(() => {
+        if (sessionStorage.getItem('auth-token')) {
+            navigate('/app')
+        }
+    }, [navigate])
+
 
     const handleLogin = async () => {
-        console.log("Inside handleLogin");
+        try{
+            console.log("Inside handleLogin");
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': bearerToken ? `Bearer ${bearerToken}` : '', // Include Bearer token if available
+                  },
+          
+                  body: JSON.stringify({    
+                    email: email,
+                    password: password,
+                  })          
+
+	 });
+        }catch(e) {
+            console.log("Error fetching details: " + e.message)
+        }
+
     };
 
     return (
