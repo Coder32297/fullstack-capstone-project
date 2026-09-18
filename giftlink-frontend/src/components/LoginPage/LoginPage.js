@@ -8,8 +8,6 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const bearerToken = sessionStorage.getItem('bearer-token');
-
 
     useEffect(() => {
         if (sessionStorage.getItem('auth-token')) {
