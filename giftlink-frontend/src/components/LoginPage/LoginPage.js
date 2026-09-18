@@ -7,10 +7,8 @@ import './LoginPage.css';
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [incorrect, setIncorrect] = useState('');
     const navigate = useNavigate();
     const bearerToken = sessionStorage.getItem('bearer-token');
-    const { setIsLoggedIn } = useAppContext();
 
 
     useEffect(() => {
@@ -23,12 +21,6 @@ function LoginPage() {
     const handleLogin = async () => {
         try{
             console.log("Inside handleLogin");
-            const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': bearerToken ? `Bearer ${bearerToken}` : '', // Include Bearer token if available
-                  },
           
                   body: JSON.stringify({    
                     email: email,
