@@ -18,21 +18,29 @@ function LoginPage() {
     }, [navigate])
 
 
-    const handleLogin = async () => {
-        try{
-            console.log("Inside handleLogin");
-          
-                  body: JSON.stringify({    
-                    email: email,
-                    password: password,
-                  })          
-
-	 });
-        }catch(e) {
-            console.log("Error fetching details: " + e.message)
+   const handleLogin = async () => {
+    try {
+        console.log("Inside handleLogin");
+        let response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: email, password: password }),
+        });
+        let res = await response.json();
+        if (res.authtoken) {
+            sessionStorage.setItem('auth-token', res.authtoken);
+            sessionStorage.setItem('name', res.userName);
+            sessionStorage.setItem('email', res.userEmail);
+            navigate('/app');
+        } else {
+            alert(res.error || "Login failed");
         }
-
-    };
+    } catch (error) {
+        console.error("Error logging in:", error);
+    }
+};
 
     return (
         <div className="container mt-5">
