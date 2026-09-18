@@ -25,11 +25,12 @@ jobs:
 
       - name: Run Linter
         run: |
+          # This command finds all JavaScript files recursively and runs JSHint on them
           find ./giftlink-backend -name app.js -exec jshint {} +
           find ./giftlink-backend -name auth.js -exec jshint {} +
           find ./giftlink-backend -name giftRoutes.js -exec jshint {} +
           find ./giftlink-backend -name searchRoutes.js -exec jshint {} +
-          echo "Linted all the JS files successfully"
+          echo "Linted all the js files successfully"
 
   client_build:
       name: Build client
@@ -50,3 +51,4 @@ jobs:
           npm install
           npm run build
           echo "Client-side build successfully"
+
