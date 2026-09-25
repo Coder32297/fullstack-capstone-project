@@ -1,4 +1,5 @@
 import React from 'react';
+import DetailsPage from './components/DetailsPage/DetailsPage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import MainPage from './components/MainPage/MainPage';
 import LoginPage from './components/LoginPage/LoginPage';
@@ -16,6 +17,7 @@ function App() {
           <Route path="/app" element={<MainPage />} />
           <Route path="/app/login" element={<LoginPage/>} />
           <Route path="/app/register" element={<RegisterPage />} />
+          <Route path="/app/product/:productId" element={<DetailsPage/>} />
         </Routes>
         </>
   );
